@@ -1,0 +1,317 @@
+:root {
+  --bg-gradient-start: #e0e5ec;
+  --bg-gradient-end: #b8c6db;
+  --calc-body-bg: #e3edf7;
+  --calc-shadow-1: rgba(163, 177, 198, 0.7);
+  --calc-shadow-2: rgba(255, 255, 255, 0.9);
+  
+  --screen-bg: #2d3436;
+  --screen-text-exp: #a0a8b0;
+  --screen-text-res: #00ffcc;
+  
+  --btn-num-bg: #e3edf7;
+  --btn-num-text: #2d3436;
+  --btn-num-shadow-1: rgba(163, 177, 198, 0.6);
+  --btn-num-shadow-2: rgba(255, 255, 255, 0.9);
+
+  --btn-op-bg: #ffeaa7;
+  --btn-op-text: #d63031;
+  
+  --btn-eq-bg: #0984e3;
+  --btn-eq-text: #ffffff;
+  
+  --panel-bg: #e3edf7;
+  --panel-border: rgba(163, 177, 198, 0.4);
+  --primary-text: #2d3436;
+}
+
+[data-theme="dark"] {
+  --bg-gradient-start: #14171a;
+  --bg-gradient-end: #0f1113;
+  --calc-body-bg: #1e222b;
+  --calc-shadow-1: rgba(0, 0, 0, 0.6);
+  --calc-shadow-2: rgba(255, 255, 255, 0.05);
+
+  --screen-bg: #0d0f12;
+  --screen-text-exp: #858b94;
+  --screen-text-res: #10ac84;
+
+  --btn-num-bg: #252a34;
+  --btn-num-text: #f5f6fa;
+  --btn-num-shadow-1: rgba(0, 0, 0, 0.5);
+  --btn-num-shadow-2: rgba(255, 255, 255, 0.02);
+
+  --btn-op-bg: #fd9644;
+  --btn-op-text: #ffffff;
+
+  --btn-eq-bg: #10ac84;
+  --btn-eq-text: #ffffff;
+
+  --panel-bg: #1e222b;
+  --panel-border: rgba(255, 255, 255, 0.05);
+  --primary-text: #f5f6fa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: background 0.3s ease;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: center;
+}
+
+.calculator-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  width: 100%;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* Calculator Body Style (Neumorphic Style) */
+.calculator-body {
+  width: 380px;
+  background: var(--calc-body-bg);
+  border-radius: 30px;
+  padding: 25px;
+  box-shadow: 12px 12px 24px var(--calc-shadow-1), 
+              -12px -12px 24px var(--calc-shadow-2);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.calculator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calculator-header .brand {
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  color: var(--primary-text);
+  opacity: 0.8;
+}
+
+.calculator-header .brand span {
+  font-weight: 400;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.theme-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.theme-btn:active {
+  transform: scale(0.85);
+}
+
+/* Display Screen */
+.calculator-screen {
+  background: var(--screen-bg);
+  border-radius: 18px;
+  padding: 20px;
+  text-align: right;
+  margin-bottom: 25px;
+  box-shadow: inset 3px 3px 6px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.05);
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  word-break: break-all;
+  overflow: hidden;
+}
+
+.expression-line {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--screen-text-exp);
+  font-size: 1.1rem;
+  min-height: 24px;
+  letter-spacing: 1px;
+}
+
+.result-line {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--screen-text-res);
+  font-size: 2.2rem;
+  font-weight: 700;
+  transition: font-size 0.15s ease-out;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.result-line::-webkit-scrollbar {
+  display: none;
+}
+
+/* Keys Area Grid */
+.calculator-keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.key {
+  border: none;
+  outline: none;
+  height: 65px;
+  border-radius: 16px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--btn-num-bg);
+  color: var(--btn-num-text);
+  box-shadow: 4px 4px 8px var(--btn-num-shadow-1), 
+              -4px -4px 8px var(--btn-num-shadow-2);
+  transition: all 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.key:active, .key.active-press {
+  box-shadow: inset 3px 3px 6px var(--btn-num-shadow-1), 
+              inset -3px -3px 6px var(--btn-num-shadow-2);
+  transform: scale(0.97);
+}
+
+.btn-operator {
+  background: var(--btn-op-bg);
+  color: var(--btn-op-text);
+  font-weight: 700;
+}
+
+.btn-function {
+  font-size: 1.15rem;
+  font-weight: bold;
+}
+
+.btn-equals {
+  background: var(--btn-eq-bg);
+  color: var(--btn-eq-text);
+  grid-column: span 1;
+}
+
+/* History Panel Style */
+.history-panel {
+  width: 320px;
+  background: var(--panel-bg);
+  border-radius: 30px;
+  padding: 25px;
+  box-shadow: 12px 12px 24px var(--calc-shadow-1), 
+              -12px -12px 24px var(--calc-shadow-2);
+  border: 1px solid var(--panel-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--panel-border);
+  padding-bottom: 10px;
+}
+
+.history-header h3 {
+  font-size: 1rem;
+  color: var(--primary-text);
+}
+
+.clear-history-btn {
+  background: transparent;
+  border: 1px solid var(--btn-op-text);
+  color: var(--btn-op-text);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-history-btn:hover {
+  background: var(--btn-op-text);
+  color: white;
+}
+
+.history-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 380px;
+}
+
+.history-item {
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.02);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: right;
+}
+
+.history-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.history-item-exp {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.history-item-res {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--primary-text);
+}
+
+.empty-msg {
+  color: #888;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 20px;
+}
+
+/* Responsive UI */
+@media (max-width: 768px) {
+  .calculator-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .calculator-body, .history-panel {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+```
+
+---
