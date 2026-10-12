@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket Calculator - Máy Tính Bỏ Túi Cao Cấp</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-gradient-start: #0f172a;
+      --bg-gradient-end: #1e293b;
+      --calc-bg: #0b0f19;
+      --calc-border: rgba(255, 255, 255, 0.08);
+      --screen-bg: #141b2d;
+      --screen-text-primary: #f8fafc;
+      --screen-text-secondary: #64748b;
+      --btn-number-bg: #1e293b;
+      --btn-number-hover: #334155;
+      --btn-number-text: #f8fafc;
+      --btn-op-bg: #f97316;
+      --btn-op-hover: #ea580c;
+      --btn-op-text: #ffffff;
+      --btn-fn-bg: #38bdf8;
+      --btn-fn-hover: #0ea5e9;
+      --btn-fn-text: #0f172a;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      --accent-color: #f97316;
+    }
+
+    [data-theme="light"] {
+      --bg-gradient-start: #f1f5f9;
+      --bg-gradient-end: #cbd5e1;
+      --calc-bg: #ffffff;
+      --calc-border: rgba(0, 0, 0, 0.1);
+      --screen-bg: #f8fafc;
+      --screen-text-primary: #0f172a;
+      --screen-text-secondary: #94a3b8;
+      --btn-number-bg: #e2e8f0;
+      --btn-number-hover: #cbd5e1;
+      --btn-number-text: #0f172a;
+      --btn-op-bg: #f97316;
+      --btn-op-hover: #ea580c;
+      --btn-op-text: #ffffff;
+      --btn-fn-bg: #38bdf8;
+      --btn-fn-hover: #0ea5e9;
+      --btn-fn-text: #ffffff;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --accent-color: #ea580c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      max-width: 900px;
+      width: 100%;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    /* Calculator Frame */
+    .calculator {
+      background: var(--calc-bg);
+      border: 1px solid var(--calc-border);
+      border-radius: 30px;
+      padding: 28px;
+      width: 380px;
+      box-shadow: 0 25px 50px -12px var(--shadow-color);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    /* Header Controls */
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--screen-text-primary);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .brand i {
+      color: var(--accent-color);
+    }
+
+    .top-controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    .control-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--screen-text-secondary);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .control-btn:hover {
+      background: var(--btn-number-hover);
+      color: var(--screen-text-primary);
+    }
+
+    /* Calculator Screen */
+    .screen {
+      background-color: var(--screen-bg);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      min-height: 120px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+      border: 1px solid var(--calc-border);
+    }
+
+    .expression-display {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      color: var(--screen-text-secondary);
+      word-wrap: break-word;
+      word-break: break-all;
+      text-align: right;
+      min-height: 24px;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .result-display {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 2.5rem;
+      color: var(--screen-text-primary);
+      width: 100%;
+      text-align: right;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .result-display::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    /* Keypad Grid */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    /* Buttons Style */
+    .btn {
+      border: none;
+      border-radius: 18px;
+      height: 65px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+    }
+
+    /* Buttons theme-mapping */
+    .btn-num {
+      background-color: var(--btn-number-bg);
+      color: var(--btn-number-text);
+    }
+
+    .btn-num:hover {
+      background-color: var(--btn-number-hover);
+    }
+
+    .btn-operator {
+      background-color: var(--btn-op-bg);
+      color: var(--btn-op-text);
+    }
+
+    .btn-operator:hover {
+      background-color: var(--btn-op-hover);
+    }
+
+    .btn-fn {
+      background-color: var(--btn-fn-bg);
+      color: var(--btn-fn-text);
+      font-size: 1.25rem;
+    }
+
+    .btn-fn:hover {
+      background-color: var(--btn-fn-hover);
+    }
+
+    .btn-double {
+      grid-column: span 2;
+    }
+
+    /* History Side Panel */
+    .history-panel {
+      background: var(--calc-bg);
+      border: 1px solid var(--calc-border);
+      border-radius: 30px;
+      padding: 24px;
+      width: 320px;
+      box-shadow: 0 25px 50px -12px var(--shadow-color);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-title {
+      font-weight: 700;
+      color: var(--screen-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .clear-history-btn {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .clear-history-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .history-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 4px;
+      max-height: 400px;
+    }
+
+    .history-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .history-list::-webkit-scrollbar-thumb {
+      background: var(--screen-text-secondary);
+      border-radius: 3px;
+    }
+
+    .history-item {
+      background: var(--screen-bg);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .history-item:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    .history-item-exp {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--screen-text-secondary);
+      word-break: break-all;
+      text-align: right;
+    }
+
+    .history-item-res {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--accent-color);
+      margin-top: 4px;
+    }
+
+    .no-history {
+      color: var(--screen-text-secondary);
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+
+    /* Floating Banner */
+    .keyboard-guide {
+      position: absolute;
+      bottom: -60px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: var(--screen-text-secondary);
+      font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .calculator {
+        width: 100%;
+        max-width: 380px;
+      }
+      .history-panel {
+        width: 100%;
+        max-width: 380px;
+        max-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- CALCULATOR UNIT -->
+    <main class="calculator" aria-label="Pocket Calculator Frame">
+      <!-- Top header Controls -->
+      <div class="calc-header">
+        <div class="brand">
+          <i class="fa-solid fa-calculator"></i>
+          <span>VIBECODE CALC</span>
+        </div>
+        <div class="top-controls">
+          <button id="theme-toggle-btn" class="control-btn" title="Chuyển chế độ Sáng/Tối" aria-label="Toggle Light Dark Theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Displays -->
+      <section class="screen" aria-label="Calculator Screen">
+        <div id="expression-display" class="expression-display" aria-live="polite"></div>
+        <div id="result-display" class="result-display" aria-live="polite">0</div>
+      </section>
+
+      <!-- Keypad -->
+      <div class="keypad" role="grid" aria-label="Calculator Keypad">
+        <button class="btn btn-fn" data-action="all-clear" aria-label="Clear All">AC</button>
+        <button class="btn btn-fn" data-action="delete" aria-label="Delete last character">DEL</button>
+        <button class="btn btn-fn" data-action="percent" aria-label="Percentage">%</button>
+        <button class="btn btn-operator" data-action="divide" aria-label="Divide">/</button>
+
+        <button class="btn btn-num" data-val="7">7</button>
+        <button class="btn btn-num" data-val="8">8</button>
+        <button class="btn btn-num" data-val="9">9</button>
+        <button class="btn btn-operator" data-action="multiply" aria-label="Multiply">*</button>
+
+        <button class="btn btn-num" data-val="4">4</button>
+        <button class="btn btn-num" data-val="5">5</button>
+        <button class="btn btn-num" data-val="6">6</button>
+        <button class="btn btn-operator" data-action="subtract" aria-label="Subtract">-</button>
+
+        <button class="btn btn-num" data-val="1">1</button>
+        <button class="btn btn-num" data-val="2">2</button>
+        <button class="btn btn-num" data-val="3">3</button>
+        <button class="btn btn-operator" data-action="add" aria-label="Add">+</button>
+
+        <button class="btn btn-num" data-action="toggle-sign" aria-label="Toggle plus minus">+/-</button>
+        <button class="btn btn-num" data-val="0">0</button>
+        <button class="btn btn-num" data-val=".">.</button>
+        <button class="btn btn-operator" id="equals-btn" data-action="calculate" aria-label="Calculate Equal">=</button>
+      </div>
+
+      <div class="keyboard-guide">
+        <i class="fa-regular fa-keyboard"></i> Hỗ trợ bàn phím đầy đủ (0-9, +, -, *, /, Enter, Backspace, Esc)
+      </div>
+    </main>
+
+    <!-- HISTORY SIDE PANEL -->
+    <aside class="history-panel" aria-label="Calculation History Panel">
+      <div class="history-header">
+        <div class="history-title">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Lịch Sử Phép Tính</span>
+        </div>
+        <button id="clear-history-btn" class="clear-history-btn" title="Xóa toàn bộ lịch sử">
+          <i class="fa-solid fa-trash-can"></i> Xóa
+        </button>
+      </div>
+      <div id="history-list-container" class="history-list">
+        <!-- History items dynamically inserted here -->
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // State Management
+    let currentInput = "0";
+    let storedExpression = "";
+    let isCalculated = false;
+    let historyData = [];
+
+    // Selectors
+    const resultDisplay = document.getElementById("result-display");
+    const expressionDisplay = document.getElementById("expression-display");
+    const historyListContainer = document.getElementById("history-list-container");
+    const clearHistoryBtn = document.getElementById("clear-history-btn");
+    const themeToggleBtn = document.getElementById("theme-toggle-btn");
+
+    // Initialize Page
+    document.addEventListener("DOMContentLoaded", () => {
+      // Load History
+      const storedHistory = localStorage.getItem("pocket_calc_history");
+      if (storedHistory) {
+        historyData = JSON.parse(storedHistory);
+        renderHistory();
+      } else {
+        renderEmptyHistory();
+      }
+
+      // Load Theme
+      const savedTheme = localStorage.getItem("pocket_calc_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      updateThemeIcon(savedTheme);
+    });
+
+    // Theme Switcher Functionality
+    themeToggleBtn.addEventListener("click", () => {
+      const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("pocket_calc_theme", newTheme);
+      updateThemeIcon(newTheme);
+    });
+
+    function updateThemeIcon(theme) {
+      themeToggleBtn.innerHTML = theme === "dark" 
+        ? '<i class="fa-solid fa-sun"></i>' 
+        : '<i class="fa-solid fa-moon"></i>';
+    }
+
+    // Precise Math Operations (Resolving Floating point issue: e.g. 0.1 + 0.2)
+    function stripPrecision(number) {
+      return parseFloat(Number(number).toPrecision(12));
+    }
+
+    // Business Logic Engine
+    function inputDigit(digit) {
+      if (isCalculated) {
+        currentInput = digit === "." ? "0." : digit;
+        isCalculated = false;
+      } else {
+        if (digit === ".") {
+          if (currentInput.includes(".")) return; // Block multiple dots
+          currentInput += ".";
+        } else {
+          if (currentInput === "0") {
+            currentInput = digit;
+          } else {
+            currentInput += digit;
+          }
+        }
+      }
+      updateUI();
+    }
+
+    function inputOperator(opCode) {
+      if (currentInput.includes("Error")) return;
+
+      const visualOps = { add: "+", subtract: "-", multiply: "*", divide: "/" };
+      const opSign = visualOps[opCode] || opCode;
+
+      if (isCalculated) {
+        storedExpression = currentInput + " " + opSign + " ";
+        isCalculated = false;
+      } else {
+        if (storedExpression && !currentInput) {
+          // Replace operator if clicked twice
+          storedExpression = storedExpression.trim().slice(0, -1) + opSign + " ";
+        } else {
+          storedExpression += currentInput + " " + opSign + " ";
+        }
+      }
+      currentInput = "0";
+      updateUI();
+    }
+
+    function calculate() {
+      if (!storedExpression) return;
+      
+      const fullExpr = storedExpression + currentInput;
+      // Convert mathematical representation
+      let parseExpr = fullExpr.replace(/×/g, "*").replace(/÷/g, "/");
+
+      try {
+        // Safe evaluation
+        let calculatedVal = safeEval(parseExpr);
+        
+        if (!isFinite(calculatedVal)) {
+          throw new Error("Division by zero");
+        }
+
+        // Format result precisely
+        calculatedVal = stripPrecision(calculatedVal);
+        
+        const finalResult = calculatedVal.toString();
+
+        // Push to History
+        saveHistoryItem(fullExpr, finalResult);
+
+        // Update displays
+        expressionDisplay.innerText = fullExpr + " =";
+        currentInput = finalResult;
+        storedExpression = "";
+        isCalculated = true;
+
+      } catch (err) {
+        currentInput = err.message === "Division by zero" ? "Error: Division by zero" : "Error";
+        expressionDisplay.innerText = "";
+        storedExpression = "";
+        isCalculated = true;
+      }
+      updateUI();
+    }
+
+    // Safe mathematical parser
+    function safeEval(str) {
+      return Function(`"use strict"; return (${str})`)();
+    }
+
+    function deleteLastChar() {
+      if (isCalculated) {
+        clearAll();
+        return;
+      }
+      if (currentInput.length > 1) {
+        currentInput = currentInput.slice(0, -1);
+        if (currentInput === "-") currentInput = "0";
+      } else {
+        currentInput = "0";
+      }
+      updateUI();
+    }
+
+    function clearAll() {
+      currentInput = "0";
+      storedExpression = "";
+      expressionDisplay.innerText = "";
+      isCalculated = false;
+      updateUI();
+    }
+
+    function toggleSign() {
+      if (currentInput === "0" || currentInput.includes("Error")) return;
+      if (currentInput.startsWith("-")) {
+        currentInput = currentInput.slice(1);
+      } else {
+        currentInput = "-" + currentInput;
+      }
+      updateUI();
+    }
+
+    function applyPercentage() {
+      if (currentInput.includes("Error")) return;
+      currentInput = stripPrecision(parseFloat(currentInput) / 100).toString();
+      updateUI();
+    }
+
+    function updateUI() {
+      // Expression Display
+      expressionDisplay.innerText = storedExpression;
+      
+      // Handle Display Limit of values
+      if (currentInput.length > 14) {
+        const parsedNum = parseFloat(currentInput);
+        if (!isNaN(parsedNum)) {
+          resultDisplay.innerText = parsedNum.toExponential(7);
+        } else {
+          resultDisplay.innerText = currentInput;
+        }
+      } else {
+        resultDisplay.innerText = currentInput;
+      }
+    }
+
+    // History Logic
+    function saveHistoryItem(expression, result) {
+      const newItem = { expression, result, id: Date.now() };
+      historyData.unshift(newItem);
+      if (historyData.length > 10) {
+        historyData.pop();
+      }
+      localStorage.setItem("pocket_calc_history", JSON.stringify(historyData));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      if (historyData.length === 0) {
+        renderEmptyHistory();
+        return;
+      }
+      historyListContainer.innerHTML = "";
+      historyData.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.setAttribute("role", "button");
+        div.setAttribute("tabindex", "0");
+        div.innerHTML = `
+          <span class="history-item-exp">${item.expression}</span>
+          <span class="history-item-res">${item.result}</span>
+        `;
+        // Load old value upon click
+        div.addEventListener("click", () => {
+          currentInput = item.result;
+          storedExpression = "";
+          expressionDisplay.innerText = "";
+          isCalculated = false;
+          updateUI();
+        });
+        historyListContainer.appendChild(div);
+      });
+    }
+
+    function renderEmptyHistory() {
+      historyListContainer.innerHTML = `
+        <div class="no-history">Chưa có phép tính nào</div>
+      `;
+    }
+
+    clearHistoryBtn.addEventListener("click", () => {
+      historyData = [];
+      localStorage.removeItem("pocket_calc_history");
+      renderEmptyHistory();
+    });
+
+    // Keypad Click Event Bindings
+    document.querySelector(".keypad").addEventListener("click", (e) => {
+      const target = e.target;
+      if (!target.classList.contains("btn")) return;
+
+      const val = target.getAttribute("data-val");
+      const action = target.getAttribute("data-action");
+
+      if (val !== null) {
+        inputDigit(val);
+      } else if (action) {
+        switch (action) {
+          case "add":
+          case "subtract":
+          case "multiply":
+          case "divide":
+            inputOperator(action);
+            break;
+          case "calculate":
+            calculate();
+            break;
+          case "all-clear":
+            clearAll();
+            break;
+          case "delete":
+            deleteLastChar();
+            break;
+          case "toggle-sign":
+            toggleSign();
+            break;
+          case "percent":
+            applyPercentage();
+            break;
+        }
+      }
+    });
+
+    // Keyboard Keydown Listener Mapping
+    document.addEventListener("keydown", (e) => {
+      // Stop mapping behavior inside any focus text inputs
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+      const key = e.key;
+
+      if (/[0-9.]/.test(key)) {
+        inputDigit(key);
+      } else if (key === "+") {
+        inputOperator("add");
+      } else if (key === "-") {
+        inputOperator("subtract");
+      } else if (key === "*") {
+        inputOperator("multiply");
+      } else if (key === "/") {
+        e.preventDefault();
+        inputOperator("divide");
+      } else if (key === "Enter" || key === "=") {
+        e.preventDefault();
+        calculate();
+      } else if (key === "Backspace") {
+        deleteLastChar();
+      } else if (key === "Escape") {
+        clearAll();
+      } else if (key === "%") {
+        applyPercentage();
+      }
+    });
+  </script>
+</body>
+</html>
+```
+
+---
