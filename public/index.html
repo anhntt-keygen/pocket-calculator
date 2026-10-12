@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket Calculator - Máy Tính Bỏ Túi Cao Cấp</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Share+Tech+Mono&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <div class="calculator-wrapper">
+      
+      <!-- Calculator Body -->
+      <div class="calculator-body">
+        <!-- Brand Name & Mode Toggle -->
+        <div class="calculator-header">
+          <span class="brand">VIBECODE <span>ELECTRONICS</span></span>
+          <button id="theme-toggle" class="theme-btn" title="Đổi giao diện">☀️</button>
+        </div>
+
+        <!-- Display Screen -->
+        <div class="calculator-screen">
+          <div id="display-expression" class="expression-line"></div>
+          <div id="display-result" class="result-line">0</div>
+        </div>
+
+        <!-- Keyboard Keypads -->
+        <div class="calculator-keys">
+          <!-- Hàng 1 -->
+          <button class="key btn-function" data-action="clear" id="key-ac">AC</button>
+          <button class="key btn-function" data-action="delete" id="key-del">DEL</button>
+          <button class="key btn-function" data-action="percent" id="key-percent">%</button>
+          <button class="key btn-operator" data-action="divide" id="key-divide">÷</button>
+
+          <!-- Hàng 2 -->
+          <button class="key btn-number" data-value="7">7</button>
+          <button class="key btn-number" data-value="8">8</button>
+          <button class="key btn-number" data-value="9">9</button>
+          <button class="key btn-operator" data-action="multiply" id="key-multiply">×</button>
+
+          <!-- Hàng 3 -->
+          <button class="key btn-number" data-value="4">4</button>
+          <button class="key btn-number" data-value="5">5</button>
+          <button class="key btn-number" data-value="6">6</button>
+          <button class="key btn-operator" data-action="subtract" id="key-subtract">-</button>
+
+          <!-- Hàng 4 -->
+          <button class="key btn-number" data-value="1">1</button>
+          <button class="key btn-number" data-value="2">2</button>
+          <button class="key btn-number" data-value="3">3</button>
+          <button class="key btn-operator" data-action="add" id="key-add">+</button>
+
+          <!-- Hàng 5 -->
+          <button class="key btn-function" data-action="toggle-sign" id="key-sign">±</button>
+          <button class="key btn-number" data-value="0">0</button>
+          <button class="key btn-decimal" data-action="decimal" id="key-decimal">.</button>
+          <button class="key btn-equals" data-action="calculate" id="key-equals">=</button>
+        </div>
+      </div>
+
+      <!-- History Sidebar -->
+      <div class="history-panel">
+        <div class="history-header">
+          <h3>🕒 Lịch Sử Tính Toán</h3>
+          <button id="clear-history-btn" class="clear-history-btn">Xóa hết</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <p class="empty-msg">Chưa có phép tính nào thực hiện.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+```
+
+---
